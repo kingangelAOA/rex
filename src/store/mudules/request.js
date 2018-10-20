@@ -41,8 +41,8 @@ const mutations = {
   request(state, payload) {
     state.options = payload.options;
     state.url = payload.url;
-    state.isFetching = true
-    fetch(state.url, state.options).then(res => {
+    state.isFetching = true;
+    payload.that.$http(state.url, state.options).then(res => {
       if (res.ok) {
         state.response = res.json()
       } else {
@@ -50,7 +50,7 @@ const mutations = {
       }
       state.isFetching = false
     }).catch(ex => {
-      state.ex = ex
+      state.ex = ex;
       state.isFetching = false
     })
   }

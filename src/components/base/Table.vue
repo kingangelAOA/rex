@@ -11,23 +11,7 @@
 
           <v-card-text>
             <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                </v-flex>
-              </v-layout>
+              <form-self />
             </v-container>
           </v-card-text>
 
@@ -48,12 +32,12 @@
       <template slot-scope="props">
         <tr>
           <td v-for="key in props.item">
-            {{ !util.isObject(props.item[key]) ? props.item[key] : ''}}
+            {{ !Util.isObject(props.item[key]) ? props.item[key] : ''}}
             <div v-if="util.isArray(props.item[key])">
               <v-icon v-for="iconItem in props.item[key]"
                       small
                       class="mr-2"
-                      @click="iconItem.function">
+                      @click="iconItem.fun">
                 {{iconItem.icon}}
               </v-icon>
             </div>
@@ -65,12 +49,14 @@
 </template>
 
 <script>
-  import util from 'util'
+  import Util from 'util'
+  import FormSelf from './Form'
 
   export default {
     name: "Table",
     components: {
-      util
+      Util,
+      FormSelf
     },
     computed: {
 
