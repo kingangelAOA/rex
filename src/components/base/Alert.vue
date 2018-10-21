@@ -9,7 +9,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex'
 
-  const {mapState} = createNamespacedHelpers('alert')
+  const {mapState} = createNamespacedHelpers('alert');
 
   export default {
     name: "Alert",

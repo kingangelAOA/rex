@@ -4,10 +4,10 @@
       <v-text-field
         v-model="form[item.name]"
         :rules="item.rules"
-        :counter="item.counter == 0 || item.counter == undefined ? 25 : item.counter"
+        :counter="item.counter === 0 || item.counter === undefined ? 25 : item.counter"
         :label="item.label"
         required
-        v-if="item.type == FormType.TEXT">
+        v-if="item.type === FormType.TEXT">
       </v-text-field>
       <v-select
         v-model="form[item.name]"
@@ -17,14 +17,14 @@
         :item-value="item.value"
         :label="item.label"
         required
-        v-else-if="item.type == FormType.SELECT">
+        v-else-if="item.type === FormType.SELECT">
       </v-select>
       <v-checkbox
         v-model="form[item.name]"
         :rules="item.rules"
         label="Do you agree?"
         required
-        v-if="item.type == FormType.CHECKBOX">
+        v-if="item.type === FormType.CHECKBOX">
       </v-checkbox>
     </template>
     <template>
@@ -46,6 +46,9 @@
 
 <script>
   import {FormType} from '../../constant'
+  import {createNamespacedHelpers} from 'vuex'
+
+  const {mapState: requestMapState, mapActions: requestMapActions} = createNamespacedHelpers('request');
 
   export default {
     name: "Form",
@@ -75,19 +78,28 @@
     components: {
       FormType
     },
-    data() {
-
+    computed: {
+      ...requestMapState({
+        isFetching: state => state.isFetching,
+        isError: state => state.isError,
+        successResponseJson: state => state.successResponseJson,
+        failedResponseJson: state => state.failedResponseJson
+      })
     },
-
+    data() {
+      return {
+        valid: false
+      }
+    },
     methods: {
+      ...requestMapActions([
+        'fetchRequest'
+      ]),
       submit() {
         if (this.$refs.form.validate()) {
-          // Native form submission is not yet supported
-          axios.post('/api/submit', {
-            name: this.name,
-            email: this.email,
-            select: this.select,
-            checkbox: this.checkbox
+          this.fetchRequest({
+            url: this.postUrl,
+            options: this.postOptions
           })
         }
       },
